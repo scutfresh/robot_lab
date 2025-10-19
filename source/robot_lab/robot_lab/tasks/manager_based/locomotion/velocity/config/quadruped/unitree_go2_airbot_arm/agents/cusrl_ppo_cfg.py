@@ -8,11 +8,10 @@ from cusrl.environment.isaaclab import TrainerCfg
 
 
 @dataclass
-class UnitreeGo2ArmRoughTrainerCfg(TrainerCfg):
+class UnitreeGo2AirbotArmRoughTrainerCfg(TrainerCfg):
     max_iterations = 20000
-    save_interval = 1000
-    logger = "wandb"
-    experiment_name = "go2_with_arm_rough"
+    save_interval = 100
+    experiment_name = "unitree_go2_airbot_arm_rough"
     agent_factory = cusrl.ActorCritic.Factory(
         num_steps_per_update=24,
         actor_factory=cusrl.Actor.Factory(
@@ -44,6 +43,6 @@ class UnitreeGo2ArmRoughTrainerCfg(TrainerCfg):
 
 
 @dataclass
-class UnitreeGo2ArmFlatTrainerCfg(UnitreeGo2ArmRoughTrainerCfg):
+class UnitreeGo2AirbotArmFlatTrainerCfg(UnitreeGo2AirbotArmRoughTrainerCfg):
     max_iterations = 5000
-    experiment_name = "go2_with_arm_flat"
+    experiment_name = "unitree_go2_airbot_arm_flat"

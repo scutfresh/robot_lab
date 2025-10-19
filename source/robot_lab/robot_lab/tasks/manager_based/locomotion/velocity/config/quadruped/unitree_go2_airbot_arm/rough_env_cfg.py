@@ -9,13 +9,13 @@ from robot_lab.tasks.manager_based.locomotion.velocity.velocity_env_cfg import L
 # Pre-defined configs
 ##
 # # use cloud assets
-# from isaaclab_assets.robots.unitree import UNITREE_GO2_ARM_CFG  # isort: skip
+# from isaaclab_assets.robots.unitree import UNITREE_GO2_CFG  # isort: skip
 # use local assets
-from robot_lab.assets.go2 import UNITREE_GO2_ARM_CFG  # isort: skip
+from robot_lab.assets.unitree import UNITREE_GO2_AIRBOT_ARM_CFG  # isort: skip
 
 
 @configclass
-class UnitreeGo2ArmRoughEnvCfg(LocomotionVelocityRoughEnvCfg):
+class UnitreeGo2AirbotArmRoughEnvCfg(LocomotionVelocityRoughEnvCfg):
     base_link_name = "base"
     foot_link_name = ".*_foot"
     # fmt: off
@@ -24,10 +24,7 @@ class UnitreeGo2ArmRoughEnvCfg(LocomotionVelocityRoughEnvCfg):
         "FL_hip_joint", "FL_thigh_joint", "FL_calf_joint",
         "RR_hip_joint", "RR_thigh_joint", "RR_calf_joint",
         "RL_hip_joint", "RL_thigh_joint", "RL_calf_joint",
-        # "joint1", "joint2", "joint3", "joint4", "joint5", "joint6",
-        # "left_joint", "right_joint",
-
-        
+        "airbot_j1", "airbot_j2", "airbot_j3", "airbot_j4", "airbot_j5", "airbot_j6",  # Add arm joints
     ]
     # fmt: on
 
@@ -36,7 +33,7 @@ class UnitreeGo2ArmRoughEnvCfg(LocomotionVelocityRoughEnvCfg):
         super().__post_init__()
 
         # ------------------------------Sence------------------------------
-        self.scene.robot = UNITREE_GO2_ARM_CFG.replace(prim_path="{ENV_REGEX_NS}/Robot")
+        self.scene.robot = UNITREE_GO2_AIRBOT_ARM_CFG.replace(prim_path="{ENV_REGEX_NS}/Robot")
         self.scene.height_scanner.prim_path = "{ENV_REGEX_NS}/Robot/" + self.base_link_name
         self.scene.height_scanner_base.prim_path = "{ENV_REGEX_NS}/Robot/" + self.base_link_name
 
@@ -52,7 +49,12 @@ class UnitreeGo2ArmRoughEnvCfg(LocomotionVelocityRoughEnvCfg):
 
         # ------------------------------Actions------------------------------
         # reduce action scale
-        self.actions.joint_pos.scale = {".*_hip_joint": 0.125, "^(?!.*_hip_joint).*": 0.25}
+        # self.actions.joint_pos.scale = {".*_hip_joint": 0.125, "^(?!.*_hip_joint).*": 0.25, "airbot_.*": 0.25}
+        self.actions.joint_pos.scale = {
+            r"^(FL|FR|RL|RR)_hip_joint$": 0.125,                 # 4 hips
+            r"^(FL|FR|RL|RR)_(thigh|calf)_joint$": 0.25,         # 8 leg joints
+            r"^airbot_j[1-6]$": 0.25,                            # 6 arm joints
+        }
         self.actions.joint_pos.clip = {".*": (-100.0, 100.0)}
         self.actions.joint_pos.joint_names = self.joint_names
 
@@ -89,9 +91,9 @@ class UnitreeGo2ArmRoughEnvCfg(LocomotionVelocityRoughEnvCfg):
         # Root penalties
         self.rewards.lin_vel_z_l2.weight = -2.0
         self.rewards.ang_vel_xy_l2.weight = -0.05
-        self.rewards.flat_orientation_l2.weight = -1
+        self.rewards.flat_orientation_l2.weight = 0
         self.rewards.base_height_l2.weight = 0
-        self.rewards.base_height_l2.params["target_height"] = 0.28
+        self.rewards.base_height_l2.params["target_height"] = 0.33
         self.rewards.base_height_l2.params["asset_cfg"].body_names = [self.base_link_name]
         self.rewards.body_lin_acc_l2.weight = 0
         self.rewards.body_lin_acc_l2.params["asset_cfg"].body_names = [self.base_link_name]
@@ -151,7 +153,7 @@ class UnitreeGo2ArmRoughEnvCfg(LocomotionVelocityRoughEnvCfg):
         self.rewards.upward.weight = 1.0
 
         # If the weight of rewards is 0, set rewards to None
-        if self.__class__.__name__ == "UnitreeGo2ArmRoughEnvCfg":
+        if self.__class__.__name__ == "UnitreeGo2AirbotArmRoughEnvCfg":
             self.disable_zero_weight_rewards()
 
         # ------------------------------Terminations------------------------------
@@ -166,9 +168,3 @@ class UnitreeGo2ArmRoughEnvCfg(LocomotionVelocityRoughEnvCfg):
         # self.commands.base_velocity.ranges.lin_vel_x = (-1.0, 1.0)
         # self.commands.base_velocity.ranges.lin_vel_y = (-0.5, 0.5)
         # self.commands.base_velocity.ranges.ang_vel_z = (-1.0, 1.0)
-
-
-
-
-
-

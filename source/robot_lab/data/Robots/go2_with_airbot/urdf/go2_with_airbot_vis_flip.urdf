@@ -827,8 +827,7 @@
       </material>
     </visual>
   </link>
-  <!-- <joint name="airbot_j1" type="revolute"> -->
-  <joint name="airbot_j1" type="fixed">
+  <joint name="airbot_j1" type="revolute">
     <origin rpy="0 0 0" xyz="0 0 0.1127"/>
     <parent link="base_link1"/>
     <child link="link1"/>
@@ -858,7 +857,7 @@
       </geometry>
     </collision>
   </link>
-  <joint name="airbot_j2" type="fixed">
+  <joint name="airbot_j2" type="revolute">
     <dynamics damping="0.0" friction="0.0" />
     <origin rpy="-1.5708 -0.3867 3.1416" xyz="0 0 0"/>
     <parent link="link1"/>
@@ -888,7 +887,7 @@
       </geometry>
     </collision>
   </link>
-  <joint name="airbot_j3" type="fixed">
+  <joint name="airbot_j3" type="revolute">
     <dynamics damping="0.0" friction="0.0" />
     <origin rpy="0 0 1.9575" xyz="0.27009 0 0"/>
     <parent link="link2"/>
@@ -918,7 +917,7 @@
       </geometry>
     </collision>
   </link>
-  <joint name="airbot_j4" type="fixed">
+  <joint name="airbot_j4" type="revolute">
     <dynamics damping="0.0" friction="0.0" />
     <origin rpy="-1.5708 -1.5708 0" xyz="0 0.29015 0"/>
     <parent link="link3"/>
@@ -948,7 +947,7 @@
       </geometry>
     </collision>
   </link>
-  <joint name="airbot_j5" type="fixed">
+  <joint name="airbot_j5" type="revolute">
     <dynamics damping="0.0" friction="0.0" />
     <origin rpy="1.5708 0 0" xyz="0 0 0"/>
     <parent link="link4"/>
@@ -978,7 +977,7 @@
       </geometry>
     </collision> -->
   </link>
-  <joint name="airbot_j6" type="fixed">
+  <joint name="airbot_j6" type="revolute">
     <dynamics damping="0.0" friction="0.0" />
     <origin rpy="-1.5708 0 0" xyz="0 0 0"/>
     <parent link="link5"/>
